@@ -46,18 +46,19 @@ def employees_list():
 def create_employee():
 
     if request.method == 'GET':
-        global departments_list
         departments_list = requests.get("http://127.0.0.1:8000/api/departments").json()
         departments_name = [departments_list[i]['name'] for i in range(len(departments_list))]
         return render_template('employee_form.html', departments_name=departments_name)
 
     elif request.method == 'POST':
         department_str = request.form['department']
+        departments_list = requests.get("http://127.0.0.1:8000/api/departments").json()
         departments = [department['id'] for department in departments_list if department['name'] == department_str]
 
         employee_id = request.form['employee_id']
         name = request.form['name']
         address = request.form['address']
+
         url = 'http://127.0.0.1:8000/api/employees'
         myobj = {
             'employee_id': employee_id,
@@ -74,4 +75,4 @@ def create_employee():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5001, debug=True)
